@@ -1,14 +1,21 @@
 package fr.insideapp.turnipoff.model
 
 import com.google.gson.annotations.SerializedName
+import fr.insideapp.turnipoff.network.utils.EnumConvertible
 
-enum class TheMovieDBMediaType {
+enum class TheMovieDBMediaType(val value: String) : EnumConvertible {
     @SerializedName("all")
-    All,
+    All("all"),
+
     @SerializedName("movie")
-    Movie,
+    Movie("movie"),
+
     @SerializedName("tv")
-    Tv,
+    Tv("tv"),
+
     @SerializedName("person")
-    Person
+    Person("person");
+
+    override val jsonValue: String
+        get() = this.value
 }

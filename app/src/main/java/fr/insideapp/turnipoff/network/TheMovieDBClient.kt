@@ -67,6 +67,7 @@ object TheMovieDBClient: Client<TheMovieDBService> {
                 .newBuilder()
                 .addQueryParameter("api_key", API_KEY)
                 .addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                .addQueryParameter("region", Locale.getDefault().country)
                 .addQueryParameter("adult", "false")
                 .build()
 
