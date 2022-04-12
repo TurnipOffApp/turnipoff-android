@@ -15,21 +15,20 @@ import fr.insideapp.turnipoff.ui.theme.Margin
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeScreenTrending(viewModel: HomeScreenViewModel, configuration: Configuration) {
+fun HomeScreenTrending(trendingMovies: List<MovieSearchResult>, configuration: Configuration) {
     Column(
         modifier = Modifier
             .height((configuration.screenHeightDp * 0.3).dp),
         verticalArrangement = Arrangement.spacedBy(Margin.normal)
     ) {
         val pagerState = rememberPagerState()
-        val movieTrending = viewModel.movieTrending
 
         HomeScreenTrendingList(
             pagerState = pagerState,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-            listTrending = movieTrending
+            listTrending = trendingMovies
         )
 
         HorizontalPagerIndicator(

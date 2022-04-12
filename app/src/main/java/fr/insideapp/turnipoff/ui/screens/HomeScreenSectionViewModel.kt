@@ -15,104 +15,158 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
-sealed class HomeScreenSectionDataHolder(
-    val title: String,
+class HomeScreenSectionDataHolder(
+    val type: Type,
+    val title: String = type.title,
     var page: Int = 0,
     val pageMax: Int = 1,
-    val data: MutableList<MovieSearchResult> = mutableListOf()
+    val data: List<MovieSearchResult> = listOf()
 ) {
-    class WorstAction(
-        page: Int = 0,
-        data: MutableList<MovieSearchResult> = mutableListOf()
-    ) : HomeScreenSectionDataHolder(
-        title = "Worst action movies",
-        page = page,
-        data = data
-    )
-
-    class Worst90(
-        page: Int = 0,
-        data: MutableList<MovieSearchResult> = mutableListOf()
-    ) : HomeScreenSectionDataHolder(
-        title = "Worst 90's movies",
-        page = page,
-        data = data
-    )
+    enum class Type(val title: String) {
+        WorstAction("Worst action movies"),
+        Worst90("Worst 90's movies"),
+        Worst80("Worst 80's movies"),
+        WorstComedy("Worst comedy movies"),
+    }
 }
 
 class HomeScreenSectionViewModel() : ViewModel() {
     private val dateFormat = SimpleDateFormat("yyyy-dd-MM")
 
-    var worstActionMovies: HomeScreenSectionDataHolder.WorstAction by mutableStateOf(HomeScreenSectionDataHolder.WorstAction())
-    var worst90sMovies: HomeScreenSectionDataHolder.Worst90 by mutableStateOf(HomeScreenSectionDataHolder.Worst90())
+    var worstActionMovies: HomeScreenSectionDataHolder by mutableStateOf(HomeScreenSectionDataHolder(type = HomeScreenSectionDataHolder.Type.WorstAction))
+    var worst90sMovies: HomeScreenSectionDataHolder by mutableStateOf(HomeScreenSectionDataHolder(type = HomeScreenSectionDataHolder.Type.Worst90))
+    var worst80sMovies: HomeScreenSectionDataHolder by mutableStateOf(HomeScreenSectionDataHolder(type = HomeScreenSectionDataHolder.Type.Worst80))
+    var worstComedyMovies: HomeScreenSectionDataHolder by mutableStateOf(HomeScreenSectionDataHolder(type = HomeScreenSectionDataHolder.Type.WorstComedy))
 
     var errorMessage: String by mutableStateOf("")
 
-    init {
-        loadMore(worstActionMovies)
-        loadMore(worst90sMovies)
+    fun loadMore(type: HomeScreenSectionDataHolder.Type) {
+        when(type) {
+            HomeScreenSectionDataHolder.Type.WorstAction -> getWorstActionMovies()
+            HomeScreenSectionDataHolder.Type.Worst90 -> getWorst90sMovies()
+            HomeScreenSectionDataHolder.Type.Worst80 -> getWorst80sMovies()
+            HomeScreenSectionDataHolder.Type.WorstComedy -> getWorstComedyMovies()
+        }
     }
 
-    fun loadMore(dataHolder: HomeScreenSectionDataHolder) {
-        if(dataHolder.page < dataHolder.pageMax) {
-            dataHolder.page += 1
+    private fun getWorstActionMovies() {
+        viewModelScope.launch {
+            if(worstActionMovies.page < worstActionMovies.pageMax) {
+                val newPage = worstActionMovies.page + 1
 
-            when(dataHolder) {
-                is HomeScreenSectionDataHolder.WorstAction -> getWorstActionMovies(dataHolder)
-                is HomeScreenSectionDataHolder.Worst90 -> getWorst90sMovies(dataHolder)
+                try {
+                    val moviesResult = TheMovieDBClient.service.discover(
+                        genres = mutableListOf(TheMovieDBMovieGenre.Action),
+                        sortby = "vote_average.asc",
+                        voteAverage = "1",
+                        page = newPage
+                    ).body()
+
+                    processResponse(
+                        type = HomeScreenSectionDataHolder.Type.WorstAction,
+                        moviesResult = moviesResult,
+                        oldData = worstActionMovies.data
+                    )
+
+                } catch (e: Exception) {
+                    errorMessage = e.message.toString()
+                }
             }
         }
     }
 
-    private fun getWorstActionMovies(dataHolder: HomeScreenSectionDataHolder) {
+    private fun getWorst90sMovies() {
         viewModelScope.launch {
-            try {
-                val moviesResult = TheMovieDBClient.service.discover(
-                    genres = mutableListOf(TheMovieDBMovieGenre.Action),
-                    sortby = "vote_average.asc",
-                    voteAverage = "1",
-                    page = dataHolder.page
-                ).body()
+            if(worst90sMovies.page < worst90sMovies.pageMax) {
+                val newPage = worst90sMovies.page + 1
 
-                if(moviesResult != null) {
-                    val movies = moviesResult.results
+                try {
+                    val moviesResult = TheMovieDBClient.service.discover(
+                        sortby = "vote_average.asc",
+                        voteAverage = "1",
+                        page = newPage,
+                        releaseAfter = "1990-01-01",
+                        releaseBefore = "1999-12-31",
+                    ).body()
 
-                    val newDataHolder = HomeScreenSectionDataHolder.WorstAction(
-                        page = moviesResult.page,
-                        data = (dataHolder.data + movies).toMutableList()
+                    processResponse(
+                        type = HomeScreenSectionDataHolder.Type.Worst90,
+                        moviesResult = moviesResult,
+                        oldData = worst90sMovies.data
                     )
-
-                    worstActionMovies = newDataHolder
+                } catch (e: Exception) {
+                    errorMessage = e.message.toString()
                 }
-            } catch (e: Exception) {
-                errorMessage = e.message.toString()
             }
         }
     }
 
-    private fun getWorst90sMovies(dataHolder: HomeScreenSectionDataHolder) {
+    private fun getWorst80sMovies() {
         viewModelScope.launch {
-            try {
-                val moviesResult = TheMovieDBClient.service.discover(
-                    sortby = "vote_average.asc",
-                    voteAverage = "1",
-                    page = dataHolder.page,
-                    releaseAfter = "1990-01-01",
-                    releaseBefore = "1999-12-31",
-                ).body()
+            if(worst80sMovies.page < worst80sMovies.pageMax) {
+                val newPage = worst80sMovies.page + 1
 
-                if(moviesResult != null) {
-                    val movies = moviesResult.results
+                try {
+                    val moviesResult = TheMovieDBClient.service.discover(
+                        sortby = "vote_average.asc",
+                        voteAverage = "1",
+                        page = newPage,
+                        releaseAfter = "1980-01-01",
+                        releaseBefore = "1989-12-31",
+                    ).body()
 
-                    val newDataHolder = HomeScreenSectionDataHolder.Worst90(
-                        page = moviesResult.page,
-                        data = (dataHolder.data + movies).toMutableList()
+                    processResponse(
+                        type = HomeScreenSectionDataHolder.Type.Worst80,
+                        moviesResult = moviesResult,
+                        oldData = worst80sMovies.data
+                    )
+                } catch (e: Exception) {
+                    errorMessage = e.message.toString()
+                }
+            }
+        }
+    }
+
+    private fun getWorstComedyMovies() {
+        viewModelScope.launch {
+            if(worstComedyMovies.page < worstComedyMovies.pageMax) {
+                val newPage = worstComedyMovies.page + 1
+
+                try {
+                    val moviesResult = TheMovieDBClient.service.discover(
+                        genres = mutableListOf(TheMovieDBMovieGenre.Comedy),
+                        sortby = "vote_average.asc",
+                        voteAverage = "1",
+                        page = newPage
+                    ).body()
+
+                    processResponse(
+                        type = HomeScreenSectionDataHolder.Type.WorstComedy,
+                        moviesResult = moviesResult,
+                        oldData = worstComedyMovies.data
                     )
 
-                    worst90sMovies = newDataHolder
+                } catch (e: Exception) {
+                    errorMessage = e.message.toString()
                 }
-            } catch (e: Exception) {
-                errorMessage = e.message.toString()
+            }
+        }
+    }
+
+    private fun processResponse(type: HomeScreenSectionDataHolder.Type, moviesResult: TheMovieDBResponse<MovieSearchResult>?, oldData: List<MovieSearchResult>) {
+        if(moviesResult != null) {
+            val newHolder = HomeScreenSectionDataHolder(
+                type = type,
+                page = moviesResult.page,
+                pageMax = moviesResult.totalPage,
+                data = (oldData + moviesResult.results)
+            )
+
+            when(type) {
+                HomeScreenSectionDataHolder.Type.WorstAction -> worstActionMovies = newHolder
+                HomeScreenSectionDataHolder.Type.Worst90 -> worst90sMovies = newHolder
+                HomeScreenSectionDataHolder.Type.Worst80 -> worst80sMovies = newHolder
+                HomeScreenSectionDataHolder.Type.WorstComedy -> worstComedyMovies = newHolder
             }
         }
     }

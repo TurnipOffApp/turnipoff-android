@@ -1,6 +1,7 @@
 package fr.insideapp.turnipoff.network
 
 import com.google.gson.*
+import fr.insideapp.turnipoff.network.utils.EnumAsOrdinalToStringConverterFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -86,6 +87,7 @@ object TheMovieDBClient: Client<TheMovieDBService> {
             .baseUrl(BASE_URL)
             .client(httpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .addConverterFactory(EnumAsOrdinalToStringConverterFactory())
             .build()
     }
 

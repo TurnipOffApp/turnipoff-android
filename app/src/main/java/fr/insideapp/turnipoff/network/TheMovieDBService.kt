@@ -32,8 +32,8 @@ interface TheMovieDBService : Service {
         @Query(value = "vote_average") voteAverage: String,
         @Query(value = "page") page: Int,
         @Query(value = "with_genres") genres: MutableList<TheMovieDBMovieGenre>? = null,
-        @Query(value = "primary_release_date.gte") releaseAfter: String? = null,
-        @Query(value = "primary_release_date.lte=") releaseBefore: String? = null
+        @Query(value = "release_date.gte") releaseAfter: String? = null,
+        @Query(value = "release_date.lte") releaseBefore: String? = null
     ): Response<TheMovieDBResponse<MovieSearchResult>>
 
     /*@GET("users")

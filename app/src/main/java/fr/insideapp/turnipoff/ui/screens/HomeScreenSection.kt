@@ -25,7 +25,7 @@ import fr.insideapp.turnipoff.ui.utils.OnEndReached
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScreenSectionDataHolder) -> Unit) {
+fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScreenSectionDataHolder.Type) -> Unit) {
     val listState = rememberLazyListState()
 
     Column(
@@ -47,7 +47,6 @@ fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScre
                 val posterPath = item.posterPath
 
                 Card(
-                    backgroundColor = Color(0xFFFF0800),
                     modifier = Modifier
                         .width(80.dp)
                         .height(120.dp),
@@ -79,6 +78,6 @@ fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScre
     }
 
     listState.OnEndReached {
-        onLoadMore(holder)
+        onLoadMore(holder.type)
     }
 }
