@@ -1,6 +1,7 @@
-package fr.insideapp.turnipoff.ui.screens
+package fr.insideapp.turnipoff.ui.screens.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -9,23 +10,22 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import fr.insideapp.turnipoff.R
 import fr.insideapp.turnipoff.network.PictureSizes
+import fr.insideapp.turnipoff.ui.Navigator
 import fr.insideapp.turnipoff.ui.theme.Margin
 import fr.insideapp.turnipoff.ui.utils.OnEndReached
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScreenSectionDataHolder.Type) -> Unit) {
+fun HomeScreenSection(navController: NavController, holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScreenSectionDataHolder.Type) -> Unit) {
     val listState = rememberLazyListState()
 
     Column(
@@ -49,7 +49,10 @@ fun HomeScreenSection(holder: HomeScreenSectionDataHolder, onLoadMore: (HomeScre
                 Card(
                     modifier = Modifier
                         .width(80.dp)
-                        .height(120.dp),
+                        .height(120.dp)
+                        .clickable {
+                            navController.navigate("movie/${item.id}")
+                        },
                     elevation = 8.dp,
                     shape = RoundedCornerShape(8.dp)
                 ) {

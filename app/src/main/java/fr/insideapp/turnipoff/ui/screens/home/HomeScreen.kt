@@ -1,4 +1,4 @@
-package fr.insideapp.turnipoff.ui.screens
+package fr.insideapp.turnipoff.ui.screens.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import fr.insideapp.turnipoff.ui.Navigator
 import fr.insideapp.turnipoff.ui.theme.Margin
 
 @Composable
@@ -62,6 +63,7 @@ fun HomeScreenTrending(navController: NavController, viewModel: HomeScreenViewMo
     val trendingMovies = viewModel.movieTrending
 
     HomeScreenTrending(
+        navController = navController,
         trendingMovies = trendingMovies,
         configuration = configuration
     )
@@ -74,7 +76,7 @@ fun WorstActionMovies(navController: NavController) {
     val viewModel: HomeScreenSectionViewModel = viewModel()
     val worstActionMovies = viewModel.worstActionMovies
 
-    HomeScreenSection(worstActionMovies) {
+    HomeScreenSection(navController, worstActionMovies) {
         viewModel.loadMore(it)
     }
 }
@@ -84,7 +86,7 @@ fun Worst90Movies(navController: NavController) {
     val viewModel: HomeScreenSectionViewModel = viewModel()
     val worst90sMovies = viewModel.worst90sMovies
 
-    HomeScreenSection(worst90sMovies) {
+    HomeScreenSection(navController, worst90sMovies) {
         viewModel.loadMore(it)
     }
 }
@@ -94,7 +96,7 @@ fun Worst80Movies(navController: NavController) {
     val viewModel: HomeScreenSectionViewModel = viewModel()
     val worst80sMovies = viewModel.worst80sMovies
 
-    HomeScreenSection(worst80sMovies) {
+    HomeScreenSection(navController, worst80sMovies) {
         viewModel.loadMore(it)
     }
 }
@@ -104,7 +106,7 @@ fun WorstComedyMovies(navController: NavController) {
     val viewModel: HomeScreenSectionViewModel = viewModel()
     val worstComedyMovies = viewModel.worstComedyMovies
 
-    HomeScreenSection(worstComedyMovies) {
+    HomeScreenSection(navController, worstComedyMovies) {
         viewModel.loadMore(it)
     }
 }

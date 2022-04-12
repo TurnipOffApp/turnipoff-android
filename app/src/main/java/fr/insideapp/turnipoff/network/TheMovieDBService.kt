@@ -4,6 +4,8 @@ import fr.insideapp.turnipoff.model.TheMovieDBMediaType
 import fr.insideapp.turnipoff.model.TheMovieDBMovieGenre
 import fr.insideapp.turnipoff.model.TheMovieDBResponse
 import fr.insideapp.turnipoff.model.TheMovieDBTimeWindow
+import fr.insideapp.turnipoff.model.movie.Movie
+import fr.insideapp.turnipoff.model.movie.MovieCredits
 import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,9 +17,6 @@ import java.util.*
 interface Service
 
 interface TheMovieDBService : Service {
-    @GET("discover/movie")
-    suspend fun discoverMovie(): Response<TheMovieDBResponse<MovieSearchResult>>
-
     @GET("trending/{media_type}/{time_window}")
     suspend fun trending(
         @Path(value = "media_type") mediaType: TheMovieDBMediaType,
@@ -35,6 +34,16 @@ interface TheMovieDBService : Service {
         @Query(value = "release_date.gte") releaseAfter: String? = null,
         @Query(value = "release_date.lte") releaseBefore: String? = null
     ): Response<TheMovieDBResponse<MovieSearchResult>>
+
+    @GET("movie/{movie_id}")
+    suspend fun getMovie(
+        @Path(value = "movie_id") movieId: Long
+    ): Response<Movie>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path(value = "movie_id") movieId: Long
+    ): Response<MovieCredits>
 
     /*@GET("users")
     suspend fun getUsers(): Response<ApiResponse<List<User>>>

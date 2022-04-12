@@ -1,5 +1,6 @@
 package fr.insideapp.turnipoff.ui
 
+import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
@@ -12,9 +13,15 @@ class Navigator {
         _sharedFlow.tryEmit(navTarget)
     }
 
-    enum class NavTarget(val label: String) {
+    sealed class NavTarget(val label: NavTargetRoute) {
+        object Home: NavTarget(NavTargetRoute.Home)
+        class Movie(movieSearchResult: MovieSearchResult): NavTarget(NavTargetRoute.Movie)
+        object Actor: NavTarget(NavTargetRoute.Actor)
+    }
+
+    enum class NavTargetRoute(val route: String) {
         Home("home"),
-        Detail("movie"),
-        Actor("actor")
+        Movie("movie/{id}"),
+        Actor("actor/{id}");
     }
 }

@@ -1,10 +1,9 @@
-package fr.insideapp.turnipoff.ui.screens
+package fr.insideapp.turnipoff.ui.screens.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import fr.insideapp.turnipoff.model.TheMovieDBMovieGenre
 import fr.insideapp.turnipoff.model.TheMovieDBResponse
@@ -12,8 +11,6 @@ import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import fr.insideapp.turnipoff.network.TheMovieDBClient
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
 
 class HomeScreenSectionDataHolder(
     val type: Type,
@@ -171,7 +168,3 @@ class HomeScreenSectionViewModel() : ViewModel() {
         }
     }
 }
-
-/*class HomeScreenSectionViewModelFactory(private val type: HomeScreenSectionHolder.Type) : ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = HomeScreenSectionViewModel(type) as T
-}*/

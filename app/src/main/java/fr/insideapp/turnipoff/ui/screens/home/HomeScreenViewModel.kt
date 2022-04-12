@@ -1,4 +1,4 @@
-package fr.insideapp.turnipoff.ui.screens
+package fr.insideapp.turnipoff.ui.screens.home
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.insideapp.turnipoff.model.TheMovieDBMediaType
-import fr.insideapp.turnipoff.model.TheMovieDBMovieGenre
 import fr.insideapp.turnipoff.model.TheMovieDBTimeWindow
 import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import fr.insideapp.turnipoff.network.TheMovieDBClient

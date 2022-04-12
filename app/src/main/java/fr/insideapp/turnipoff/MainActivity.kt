@@ -13,11 +13,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import fr.insideapp.turnipoff.ui.Navigator
-import fr.insideapp.turnipoff.ui.screens.HomeScreen
+import fr.insideapp.turnipoff.ui.screens.home.HomeScreen
+import fr.insideapp.turnipoff.ui.screens.movie.MovieScreen
 import fr.insideapp.turnipoff.ui.theme.TurnipOffTheme
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,25 +49,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavigationComponent(
-    navController: NavHostController,
-    navigator: Navigator = Navigator()
+    navController: NavHostController
 ) {
-    LaunchedEffect("navigation") {
-        navigator.sharedFlow.onEach {
-            navController.navigate(it.label)
-        }.launchIn(this)
-    }
     NavHost(
         navController = navController,
-        startDestination = Navigator.NavTarget.Home.label
+        startDestination = Navigator.NavTargetRoute.Home.route
     ) {
-        composable(Navigator.NavTarget.Home.label) {
+        composable(
+            route = Navigator.NavTargetRoute.Home.route
+        ) {
             HomeScreen(navController)
         }
-        /*composable("movie") {
-            DetailScreen()
+        composable(
+            route = Navigator.NavTargetRoute.Movie.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            MovieScreen(navController, backStackEntry.arguments?.getLong("id") ?: 0L)
         }
-        composable("actor") {
+        /*composable("actor") {
             DetailScreen()
         }*/
     }
