@@ -1,6 +1,7 @@
 package fr.insideapp.turnipoff.model.movie
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalDate
 
 data class Movie(
     @SerializedName("id")
@@ -34,7 +35,7 @@ data class Movie(
     @SerializedName("production_countries")
     val productionCountries: List<ProductionCountry>,
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: LocalDate?,
     @SerializedName("revenue")
     val revenue: Long,
     @SerializedName("runtime")

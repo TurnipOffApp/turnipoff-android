@@ -1,6 +1,7 @@
 package fr.insideapp.turnipoff.model.movie
 
 import com.google.gson.annotations.SerializedName
+import fr.insideapp.turnipoff.model.person.Gender
 
 data class MovieCredits(
     @SerializedName("id")
@@ -41,17 +42,6 @@ data class MovieCredits(
         @SerializedName("job")
         val job: String? = ""
     ) {
-        enum class Gender {
-            @SerializedName("0")
-            Unknown,
-
-            @SerializedName("1")
-            Female,
-
-            @SerializedName("2")
-            Male
-        }
-
         val subtitle: String
             get() = if(!character.isNullOrBlank()) {
                 character

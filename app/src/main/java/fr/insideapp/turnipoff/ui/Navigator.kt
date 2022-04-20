@@ -16,12 +16,12 @@ class Navigator {
     sealed class NavTarget(val label: NavTargetRoute) {
         object Home: NavTarget(NavTargetRoute.Home)
         class Movie(movieSearchResult: MovieSearchResult): NavTarget(NavTargetRoute.Movie)
-        object Actor: NavTarget(NavTargetRoute.Actor)
+        object Person: NavTarget(NavTargetRoute.Person)
     }
 
     enum class NavTargetRoute(val route: String) {
         Home("home"),
         Movie("movie/{id}"),
-        Actor("actor/{id}");
+        Person("person/{id}");
     }
 }

@@ -6,6 +6,7 @@ import fr.insideapp.turnipoff.model.TheMovieDBResponse
 import fr.insideapp.turnipoff.model.TheMovieDBTimeWindow
 import fr.insideapp.turnipoff.model.movie.Movie
 import fr.insideapp.turnipoff.model.movie.MovieCredits
+import fr.insideapp.turnipoff.model.person.Person
 import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import retrofit2.Response
 import retrofit2.http.GET
@@ -45,15 +46,8 @@ interface TheMovieDBService : Service {
         @Path(value = "movie_id") movieId: Long
     ): Response<MovieCredits>
 
-    /*@GET("users")
-    suspend fun getUsers(): Response<ApiResponse<List<User>>>
-
-    @GET("suppliers")
-    suspend fun getSuppliers(): Response<ApiResponse<List<Supplier>>>
-
-    @GET("customer/{customerId}")
-    suspend fun getCustomerById(@Path("customerId") customerId: Long): Response<ApiResponse<Customer>>
-
-    @GET("supplier/{supplierId}")
-    suspend fun getSupplierById(@Path("supplierId") supplierId: Long): Response<Supplier>*/
+    @GET("person/{person_id}")
+    suspend fun getPerson(
+        @Path(value = "person_id") personId: Long
+    ): Response<Person>
 }

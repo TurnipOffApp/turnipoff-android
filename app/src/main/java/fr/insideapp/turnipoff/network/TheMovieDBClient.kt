@@ -22,12 +22,12 @@ object TheMovieDBClient: Client<TheMovieDBService> {
     private const val BASE_URL: String = "https://api.themoviedb.org/3/"
     private const val API_KEY: String = "7aeaa9d72de6df534afb8b71ac7d82eb"
 
-    var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-dd-MM")
+    var formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     private val gson: Gson by lazy {
         GsonBuilder()
             .setLenient()
-            .setDateFormat("yyyy-dd-MM")
+            .setDateFormat("yyyy-MM-dd")
             .registerTypeAdapter(LocalDate::class.java, object : JsonDeserializer<LocalDate?>, JsonSerializer<LocalDate?> {
                 override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): LocalDate? {
                     return try {

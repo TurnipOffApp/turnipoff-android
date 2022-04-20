@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import fr.insideapp.turnipoff.ui.Navigator
+import fr.insideapp.turnipoff.ui.screens.credit.PersonScreen
 import fr.insideapp.turnipoff.ui.screens.home.HomeScreen
 import fr.insideapp.turnipoff.ui.screens.movie.MovieScreen
 import fr.insideapp.turnipoff.ui.theme.TurnipOffTheme
@@ -68,9 +69,14 @@ fun NavigationComponent(
         ) { backStackEntry ->
             MovieScreen(navController, backStackEntry.arguments?.getLong("id") ?: 0L)
         }
-        /*composable("actor") {
-            DetailScreen()
-        }*/
+        composable(
+            route = Navigator.NavTargetRoute.Person.route,
+            arguments = listOf(
+                navArgument("id") { type = NavType.LongType }
+            )
+        ) { backStackEntry ->
+            PersonScreen(navController, backStackEntry.arguments?.getLong("id") ?: 0L)
+        }
     }
 }
 

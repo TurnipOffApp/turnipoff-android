@@ -10,8 +10,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -27,9 +25,10 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import fr.insideapp.turnipoff.R
 import fr.insideapp.turnipoff.model.movie.MovieCredits
-import fr.insideapp.turnipoff.model.search.MovieSearchResult
 import fr.insideapp.turnipoff.network.PictureSizes
 import fr.insideapp.turnipoff.ui.theme.Margin
+
+private typealias NavigateTo = (personId: Long) -> Unit
 
 @Composable
 fun MovieScreen(navController: NavController, movieId: Long) {
@@ -41,7 +40,12 @@ fun MovieScreen(navController: NavController, movieId: Long) {
         verticalArrangement = Arrangement.spacedBy(Margin.medium)
     ) {
         MovieDetails(viewModel = viewModel)
-        MovieCredits(viewModel = viewModel)
+        MovieCredits(
+            viewModel = viewModel,
+            navigateTo = { personId ->
+                navController.navigate("person/${personId}")
+            }
+        )
     }
 }
 
@@ -135,9 +139,9 @@ private fun MovieDetails(viewModel: MovieScreenViewModel) {
                         horizontalArrangement = Arrangement.spacedBy(Margin.medium)
                     ) {
                         Text(
-                            text = movie.releaseDate
+                            text = "${movie.releaseDate?.year ?: "N/A"}"
                         )
-                        Text(text = movie.productionCountries.map { it.name }.joinToString(","))
+                        Text(text = movie.productionCountries.joinToString(",") { it.name })
                     }
                 }
             }
@@ -161,7 +165,7 @@ private fun MovieDetails(viewModel: MovieScreenViewModel) {
 }
 
 @Composable
-private fun MovieCredits(viewModel: MovieScreenViewModel) {
+private fun MovieCredits(viewModel: MovieScreenViewModel, navigateTo: NavigateTo = {}) {
     val movieCredits = viewModel.movieCredits
 
     if(movieCredits != null) {
@@ -172,14 +176,26 @@ private fun MovieCredits(viewModel: MovieScreenViewModel) {
             Divider(
                 modifier = Modifier.background(Color.Gray)
             )
-            CreditList("Cast", movieCredits.cast)
-            CreditList("Crew", movieCredits.crew)
+            if(movieCredits.cast.isNotEmpty()) {
+                CreditList(
+                    title = "Cast",
+                    credits = movieCredits.cast,
+                    navigateTo = navigateTo
+                )
+            }
+            if(movieCredits.crew.isNotEmpty()) {
+                CreditList(
+                    title = "Crew",
+                    credits = movieCredits.crew,
+                    navigateTo = navigateTo
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun CreditList(title: String, credits: List<MovieCredits.Credit>) {
+private fun CreditList(title: String, credits: List<MovieCredits.Credit>, navigateTo: NavigateTo = {}) {
     Column(
         verticalArrangement = Arrangement.spacedBy(Margin.medium)
     ) {
@@ -194,14 +210,17 @@ private fun CreditList(title: String, credits: List<MovieCredits.Credit>) {
             horizontalArrangement = Arrangement.spacedBy(Margin.normal)
         ) {
             items(credits) { credit ->
-                CreditItem(credit)
+                CreditItem(
+                    credit = credit,
+                    navigateTo = navigateTo
+                )
             }
         }
     }
 }
 
 @Composable
-private fun CreditItem(credit: MovieCredits.Credit) {
+private fun CreditItem(credit: MovieCredits.Credit, navigateTo: NavigateTo = {}) {
     val creditPath = credit.profilePath
     Column(
         modifier = Modifier.width(80.dp),
@@ -210,7 +229,10 @@ private fun CreditItem(credit: MovieCredits.Credit) {
     ) {
         Card(
             elevation = Margin.medium,
-            shape = RoundedCornerShape(Margin.medium)
+            shape = RoundedCornerShape(Margin.medium),
+            modifier = Modifier.clickable {
+                navigateTo(credit.id)
+            }
         ) {
             if(creditPath != null) {
                 Image(

@@ -2,7 +2,7 @@ package fr.insideapp.turnipoff.model.movie
 
 import com.google.gson.annotations.SerializedName
 
-class Collection(
+data class Collection(
     @SerializedName("id")
     val id: Long,
 
