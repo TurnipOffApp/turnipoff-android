@@ -1,5 +1,6 @@
 package fr.insideapp.turnipoff.network
 
+import com.google.gson.annotations.SerializedName
 import fr.insideapp.turnipoff.model.TheMovieDBMediaType
 import fr.insideapp.turnipoff.model.TheMovieDBMovieGenre
 import fr.insideapp.turnipoff.model.TheMovieDBResponse
@@ -12,8 +13,6 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import java.time.LocalDate
-import java.util.*
 
 interface Service
 
@@ -28,8 +27,8 @@ interface TheMovieDBService : Service {
 
     @GET("discover/movie")
     suspend fun discover(
-        @Query(value = "sort_by") sortby: String,
-        @Query(value = "vote_average") voteAverage: String,
+        @Query(value = "sort_by") sortby: String = "vote_average.asc",
+        @Query(value = "vote_count.gte") coteCount: Int = 25,
         @Query(value = "page") page: Int,
         @Query(value = "with_genres") genres: MutableList<TheMovieDBMovieGenre>? = null,
         @Query(value = "release_date.gte") releaseAfter: String? = null,
@@ -50,4 +49,9 @@ interface TheMovieDBService : Service {
     suspend fun getPerson(
         @Path(value = "person_id") personId: Long
     ): Response<Person>
+
+    @GET("person/{person_id}/movie_credits")
+    suspend fun getPersonCredits(
+        @Path(value = "person_id") personId: Long
+    ): Response<MovieCredits>
 }

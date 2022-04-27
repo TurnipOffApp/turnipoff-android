@@ -15,6 +15,8 @@ data class MovieCredits(
     data class Credit(
         @SerializedName("id")
         val id: Long,
+        @SerializedName("title")
+        val title: String,
         @SerializedName("adult")
         val adult: Boolean,
         @SerializedName("gender")
@@ -29,6 +31,8 @@ data class MovieCredits(
         val popularity: Double,
         @SerializedName("profile_path")
         val profilePath: String?,
+        @SerializedName("poster_path")
+        val posterPath: String?,
         @SerializedName("cast_id")
         val castID: Long,
         @SerializedName("character")

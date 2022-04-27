@@ -12,7 +12,7 @@ fun LazyListState.OnEndReached(
             val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
                 ?: return@derivedStateOf true
 
-            lastVisibleItem.index == layoutInfo.totalItemsCount - 1
+            lastVisibleItem.index == layoutInfo.totalItemsCount - 5
         }
     }
 

@@ -9,7 +9,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -23,8 +22,6 @@ import fr.insideapp.turnipoff.ui.screens.credit.PersonScreen
 import fr.insideapp.turnipoff.ui.screens.home.HomeScreen
 import fr.insideapp.turnipoff.ui.screens.movie.MovieScreen
 import fr.insideapp.turnipoff.ui.theme.TurnipOffTheme
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class MainActivity : ComponentActivity() {
 
@@ -64,18 +61,26 @@ fun NavigationComponent(
         composable(
             route = Navigator.NavTargetRoute.Movie.route,
             arguments = listOf(
+                navArgument("name") { type = NavType.StringType },
                 navArgument("id") { type = NavType.LongType }
             )
         ) { backStackEntry ->
-            MovieScreen(navController, backStackEntry.arguments?.getLong("id") ?: 0L)
+            MovieScreen(
+                navController = navController,
+                movieName = backStackEntry.arguments?.getString("name") ?: "Movie",
+                movieId = backStackEntry.arguments?.getLong("id") ?: 0L)
         }
         composable(
             route = Navigator.NavTargetRoute.Person.route,
             arguments = listOf(
+                navArgument("name") { type = NavType.StringType },
                 navArgument("id") { type = NavType.LongType }
             )
         ) { backStackEntry ->
-            PersonScreen(navController, backStackEntry.arguments?.getLong("id") ?: 0L)
+            PersonScreen(
+                navController = navController,
+                personName = backStackEntry.arguments?.getString("name") ?: "Person",
+                personId = backStackEntry.arguments?.getLong("id") ?: 0L)
         }
     }
 }

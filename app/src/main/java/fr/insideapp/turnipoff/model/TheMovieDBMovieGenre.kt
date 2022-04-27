@@ -3,7 +3,7 @@ package fr.insideapp.turnipoff.model
 import com.google.gson.annotations.SerializedName
 import fr.insideapp.turnipoff.network.utils.EnumConvertible
 
-enum class TheMovieDBMovieGenre(val value: String) : EnumConvertible {
+enum class TheMovieDBMovieGenre(private val value: String) : EnumConvertible {
     @SerializedName("28")
     Action("28"),
 
