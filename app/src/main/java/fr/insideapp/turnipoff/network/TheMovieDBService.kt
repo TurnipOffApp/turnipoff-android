@@ -28,7 +28,7 @@ interface TheMovieDBService : Service {
     @GET("discover/movie")
     suspend fun discover(
         @Query(value = "sort_by") sortby: String = "vote_average.asc",
-        @Query(value = "vote_count.gte") coteCount: Int = 25,
+        @Query(value = "vote_count.gte") voteCount: Int = 25,
         @Query(value = "page") page: Int,
         @Query(value = "with_genres") genres: MutableList<TheMovieDBMovieGenre>? = null,
         @Query(value = "release_date.gte") releaseAfter: String? = null,
