@@ -136,7 +136,8 @@ private fun MovieDetails(viewModel: MovieScreenViewModel) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = Margin.normal)
+                    .padding(horizontal = Margin.normal),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
@@ -154,7 +155,7 @@ private fun MovieDetails(viewModel: MovieScreenViewModel) {
                 Column(
                     modifier = Modifier
                         .weight(1.0f)
-                        .height(60.dp),
+                        .wrapContentHeight(),
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Center
                 ) {
@@ -162,14 +163,16 @@ private fun MovieDetails(viewModel: MovieScreenViewModel) {
                         fontWeight = FontWeight.Bold,
                         text = movie.title
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(Margin.medium)
-                    ) {
-                        Text(
-                            text = "${movie.releaseDate?.year ?: "N/A"}"
-                        )
-                        Text(text = movie.productionCountries.joinToString(",") { it.name })
-                    }
+                    Text(
+                        fontWeight = FontWeight.Bold,
+                        text = movie.genresString
+                    )
+                    Text(
+                        text = movie.releaseYear
+                    )
+                    Text(
+                        text = movie.duration
+                    )
                 }
             }
 

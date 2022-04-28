@@ -9,10 +9,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
 import java.lang.reflect.Type
+import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 private interface Client<T: Service> {
     val service: T
@@ -46,6 +46,15 @@ object TheMovieDBClient: Client<TheMovieDBService> {
                         JsonPrimitive(src.format(formatter))
                     } else {
                         JsonNull.INSTANCE
+                    }
+                }
+            })
+            .registerTypeAdapter(Duration::class.java, object : JsonDeserializer<Duration> {
+                override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Duration {
+                    return try {
+                        Duration.ofMinutes(json?.asLong ?: 0)
+                    } catch (e: Exception) {
+                        Duration.ofMinutes(0)
                     }
                 }
             })

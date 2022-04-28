@@ -131,7 +131,7 @@ private fun PersonDetails(viewModel: PersonScreenViewModel) {
                 ) {
                     Text(
                         fontWeight = FontWeight.Bold,
-                        text = person.popularity.toString(),
+                        text = "%.1f".format(viewModel.personAverage),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -146,16 +146,16 @@ private fun PersonDetails(viewModel: PersonScreenViewModel) {
                         fontWeight = FontWeight.Bold,
                         text = person.name
                     )
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(Margin.medium)
-                    ) {
-                        val birthday = person.birthday
+                    val birthday = person.birthday
 
-                        if(birthday != null) {
-                            Text(text = person.birthday.formatForDisplay())
-                            Text(text = " - ")
-                        }
-                        Text(text = person.department)
+                    if(birthday != null) {
+                        Text(text = birthday.formatForDisplay())
+                    }
+
+                    val placeOfBirth = person.placeOfBirth
+
+                    if(placeOfBirth != null) {
+                        Text(text = placeOfBirth)
                     }
                 }
             }
@@ -170,6 +170,14 @@ private fun PersonDetails(viewModel: PersonScreenViewModel) {
                         .fillMaxWidth()
                         .padding(horizontal = Margin.normal),
                     text = person.biography,
+                    textAlign = TextAlign.Justify
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Margin.normal),
+                    text = "No biography.",
                     textAlign = TextAlign.Justify
                 )
             }

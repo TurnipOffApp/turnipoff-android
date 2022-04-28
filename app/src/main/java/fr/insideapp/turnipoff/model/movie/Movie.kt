@@ -1,6 +1,7 @@
 package fr.insideapp.turnipoff.model.movie
 
 import com.google.gson.annotations.SerializedName
+import java.time.Duration
 import java.time.LocalDate
 
 data class Movie(
@@ -39,7 +40,7 @@ data class Movie(
     @SerializedName("revenue")
     val revenue: Long,
     @SerializedName("runtime")
-    val runtime: Long,
+    val runtime: Duration,
     @SerializedName("spoken_languages")
     val spokenLanguages: List<SpokenLanguage>,
     @SerializedName("status")
@@ -55,6 +56,21 @@ data class Movie(
     @SerializedName("vote_count")
     val voteCount: Long
 ) {
+    val releaseYear: String
+        get() = releaseDate?.year.let { it.toString() }
+
+    val duration: String
+        get() {
+            val duration = runtime
+            val hour = duration.toHours()
+            val minute = duration.minusHours(hour).toMinutes()
+
+            return "${hour}h ${minute}m"
+        }
+
+    val genresString: String
+        get() = genres.joinToString(", ") { it.name }
+
     data class Genre(
         @SerializedName("id")
         val id: Long,

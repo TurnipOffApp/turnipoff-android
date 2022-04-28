@@ -44,7 +44,9 @@ data class MovieCredits(
         @SerializedName("department")
         val department: String = "",
         @SerializedName("job")
-        val job: String? = ""
+        val job: String? = "",
+        @SerializedName("vote_average")
+        val average: Float = 0.0f
     ) {
         val subtitle: String
             get() = if(!character.isNullOrBlank()) {
